@@ -1,0 +1,30 @@
+# Render Blueprint - one-click deploy. Render asks for the secret values
+# (marked sync: false) when you create the Blueprint. Leave any blank to use demo mode.
+services:
+  - type: web
+    name: invoicepilot
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: PAYPAL_ENV
+        value: sandbox
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
+      - key: AI_PROVIDER
+        value: auto
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: BUSINESS_NAME
+        value: InvoicePilot Demo Studio
+      - key: DEFAULT_CURRENCY
+        value: USD

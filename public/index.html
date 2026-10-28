@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>InvoicePilot · AI billing agent for freelancers</title>
+  <meta name="description" content="Paste a client chat. Get paid with PayPal." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <div class="brand"><span class="logo">✈︎</span> InvoicePilot</div>
+      <nav class="tabs" role="tablist">
+        <button class="tab active" data-tab="create">✨ New invoice</button>
+        <button class="tab" data-tab="agent">💬 Agent</button>
+        <button class="tab" data-tab="dashboard">📊 Dashboard</button>
+      </nav>
+      <div class="status" id="status"></div>
+    </div>
+  </header>
+
+  <section class="hero wrap">
+    <h1>Paste a client chat. <span class="grad">Get paid with PayPal.</span></h1>
+    <p class="muted">InvoicePilot reads the conversation (English or Hinglish), builds the invoice for you, sends it through PayPal, and politely chases late payers.</p>
+  </section>
+
+  <main class="wrap">
+    <!-- CREATE -->
+    <section class="panel" id="tab-create">
+      <div class="grid2">
+        <div class="card">
+          <div class="card-h"><h2>1 · Paste the conversation</h2></div>
+          <textarea id="raw" rows="11" placeholder="Paste a WhatsApp chat, an email, or just type: invoice Acme $300 for logo design due Friday, billing@acme.com"></textarea>
+          <div class="chips">
+            <span class="muted small">Try:</span>
+            <button class="chip" data-sample="email">📧 Client email</button>
+            <button class="chip" data-sample="hinglish">🇮🇳 Hinglish</button>
+            <button class="chip" data-sample="quick">⚡ One-liner</button>
+          </div>
+          <button class="btn btn-primary wide" id="extract">✨ Build invoice with AI</button>
+          <p class="muted tiny" id="extract-meta"></p>
+        </div>
+
+        <div class="card" id="draft-card">
+          <div class="card-h"><h2>2 · Review &amp; send</h2><span class="pill" id="draft-source" hidden></span></div>
+          <div id="draft-empty" class="empty">Your invoice draft appears here. Every field is editable before anything goes to PayPal.</div>
+          <form id="draft" hidden></form>
+        </div>
+      </div>
+      <div id="result"></div>
+    </section>
+
+    <!-- AGENT -->
+    <section class="panel" id="tab-agent" hidden>
+      <div class="card chat-card">
+        <div class="card-h"><h2>Talk to your billing agent</h2><span class="muted small">It can create invoices, check who paid, and draft reminders. You approve anything that goes to a client.</span></div>
+        <div id="chat" class="chat"></div>
+        <div class="chips">
+          <button class="chip" data-say="Who hasn't paid me yet?">Who hasn't paid?</button>
+          <button class="chip" data-say="Remind Northwind about their overdue invoice">Remind Northwind</button>
+          <button class="chip" data-say="Invoice Acme Corp $300 for logo design due Friday, billing@acme.com">Invoice Acme $300</button>
+          <button class="chip" data-say="Is mahine kitna paisa pending hai?">Kitna pending hai?</button>
+        </div>
+        <form id="chat-form" class="chat-form">
+          <input id="chat-input" autocomplete="off" placeholder='e.g. "Priya ko 6 posts ka $25 each bill bhejo, due next week"' />
+          <button class="btn btn-primary">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section class="panel" id="tab-dashboard" hidden>
+      <div class="stats" id="stats"></div>
+      <div class="card">
+        <div class="card-h"><h2>PayPal invoices</h2><button class="btn btn-ghost" id="refresh">↻ Refresh from PayPal</button></div>
+        <div id="inv-table"></div>
+      </div>
+      <div class="card">
+        <div class="card-h"><h2>Checkout payment links</h2><span class="muted small">PayPal Orders v2 · created this session</span></div>
+        <div id="links-table"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap foot muted tiny">InvoicePilot · Built for the PayPal AI Hackathon · PayPal Invoicing v2 + Orders v2 + JS SDK · MIT licensed</footer>
+
+  <dialog id="modal"><form method="dialog" id="modal-body"></form></dialog>
+  <div id="toast" class="toast" hidden></div>
+  <script src="/app.js"></script>
+</body>
+</html>
