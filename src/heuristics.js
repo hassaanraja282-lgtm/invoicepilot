@@ -15,7 +15,7 @@ const CUR_SYMBOLS = [
 const curOf = (s) => (CUR_SYMBOLS.find(([re]) => re.test(s)) || [null, null])[1];
 
 const PRE = String.raw`(?<![a-zA-Z])(us\$|a\$|c\$|s\$|\$|€|£|₹|rs\.?|usd|eur|gbp|inr|aud|cad|sgd)\s?`;
-const NUM = String.raw`(\d[\d,]*(?:\.\d+)?)\s?(k)?`;
+const NUM = String.raw`(\d[\d,]*(?:\.\d+)?)(?:\s?(k)(?![a-z]))?`;
 const POST = String.raw`\s?(usd|dollars?|bucks|eur|euros?|gbp|pounds?|inr|rupees?|rs|aud|cad|sgd)\b`;
 const AMOUNT_RE = new RegExp(`${PRE}${NUM}|${NUM}${POST}`, 'gi');
 

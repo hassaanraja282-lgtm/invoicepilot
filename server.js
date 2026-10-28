@@ -51,6 +51,25 @@ app.get('/api/status', (req, res) => res.json({
   defaultCurrency: cfg.defaultCurrency,
 }));
 
+
+// Quick AI connectivity check (no secrets returned).
+app.get('/api/ai-ping', wrap(async (req, res) => {
+  const cfgAi = require('./src/config').ai;
+  if (!cfgAi.enabled) return res.json({ enabled: false });
+  const out = { provider: cfgAi.provider, model: cfgAi.model };
+  const t0 = Date.now();
+  try {
+    const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), 20000);
+    const r = await fetch(`${cfgAi.baseUrl}/chat/completions`, { method: 'POST', signal: ctrl.signal,
+      headers: { Authorization: `Bearer ${cfgAi.apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: cfgAi.model, messages: [{ role: 'user', content: 'Reply with OK' }] }) });
+    clearTimeout(tm);
+    out.status = r.status; out.body = (await r.text()).slice(0, 300);
+  } catch (e) { out.error = String(e.message || e); }
+  out.ms = Date.now() - t0;
+  res.json(out);
+}));
+
 app.post('/api/extract', wrap(async (req, res) => {
   const text = String(req.body?.text || '').trim();
   if (!text) return res.status(400).json({ error: 'Paste a client message or describe the job first.' });
