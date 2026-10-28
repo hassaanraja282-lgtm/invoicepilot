@@ -52,7 +52,7 @@ Only two npm dependencies (`express`, `dotenv`). Node 18+ built-in `fetch` talks
 1. Fork or upload this repo to your GitHub account.
 2. Click the button below, **or** in Render go to **New → Blueprint** and pick your repo:
 
-   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/hassaanraja282-lgtm/new)
+   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/hassaanraja282-lgtm/invoicepilot)
 
    *(Replace `hassaanraja282-lgtm` with your GitHub username in this README after you push.)*
 3. Render asks for `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `GEMINI_API_KEY` and `OPENAI_API_KEY`. Paste the ones you have and leave the rest blank. Blank PayPal keys = demo PayPal; blank AI keys = demo AI.
