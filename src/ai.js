@@ -5,15 +5,32 @@ const cfg = require('./config');
 const { extractHeuristic } = require('./heuristics');
 const { todayISO, draftTotal } = require('./money');
 
-async function chatCompletion({ messages, tools, json = false, temperature = 0.2 }) {
+// Try the main model, then fallbacks (free-tier models can be busy or slow).
+async function chatCompletion(opts) {
   if (!cfg.ai.enabled) throw new Error('AI is not configured (demo mode)');
-  const body = { model: cfg.ai.model, messages, temperature };
+  const fallbacks = (process.env.AI_FALLBACK_MODELS ?? (cfg.ai.provider === 'gemini' ? 'gemini-3.5-flash-lite,gemini-3.6-flash' : ''))
+    .split(',').map((m) => m.trim()).filter(Boolean);
+  const models = [cfg.ai.model, ...fallbacks.filter((m) => m !== cfg.ai.model)];
+  let lastErr;
+  for (const model of models) {
+    try { return await chatOnce({ ...opts, model }); }
+    catch (e) {
+      lastErr = e;
+      const msg = String(e.message || e);
+      if (!/aborted|\(429\)|\(5\d\d\)|fetch failed/i.test(msg)) throw e;
+    }
+  }
+  throw lastErr;
+}
+
+async function chatOnce({ messages, tools, json = false, temperature = 0.2, model }) {
+  const body = { model, messages, temperature };
   if (tools && tools.length) { body.tools = tools; body.tool_choice = 'auto'; }
   if (json) body.response_format = { type: 'json_object' };
   // Gemini 3 models think by default; keep it light so replies stay fast.
-  if (cfg.ai.provider === 'gemini') body.reasoning_effort = process.env.AI_REASONING_EFFORT || 'low';
+  if (cfg.ai.provider === 'gemini' && /gemini-3\.[6-9]|gemini-4/.test(model)) body.reasoning_effort = process.env.AI_REASONING_EFFORT || 'low';
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 45_000);
+  const timer = setTimeout(() => ctrl.abort(), Number(process.env.AI_TIMEOUT_MS || 20_000));
   try {
     const res = await fetch(`${cfg.ai.baseUrl}/chat/completions`, {
       method: 'POST',
