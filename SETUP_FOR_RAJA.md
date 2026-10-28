@@ -20,7 +20,7 @@ Every account below is **free**. You don't need a credit card anywhere. If any s
 2. Click **+** (top right) → **New repository**. Name it `invoicepilot`, choose **Public**, and don't tick "Add a README" (we already have one). Click **Create repository**.
 3. On the empty repo page, click **uploading an existing file**. Unzip `invoicepilot.zip` on your computer, then drag **everything inside the `invoicepilot` folder** into the browser. Include the `public`, `src` and `test` folders and the hidden-looking files like `.gitignore`. If your file browser hides dot-files, it's fine to skip them. Click **Commit changes**.
 4. On the repo home page, click the ⚙️ next to **About** and add a description: *AI billing agent: paste a client chat, get paid with PayPal.* GitHub detects the **MIT License** from the `LICENSE` file and shows it in About automatically (the rules require this).
-5. Edit `README.md` (pencil icon): replace `YOUR-GITHUB-USERNAME` with your GitHub username in the Deploy-to-Render link, then commit.
+5. Edit `README.md` (pencil icon): replace `hassaanraja282-lgtm` with your GitHub username in the Deploy-to-Render link, then commit.
 
 ## 2) PayPal Developer: sandbox keys
 1. Go to https://developer.paypal.com and click **Log in to Dashboard**. Use your normal PayPal account or sign up free. Sandbox never moves real money.
